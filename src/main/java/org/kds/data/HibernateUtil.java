@@ -3,10 +3,9 @@ package org.kds.data;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
-import org.kds.data.entities.User;
 
 /**
  *  This class holds the logic to create the Hibernate Session,
@@ -20,13 +19,21 @@ public class HibernateUtil {
 
     private static SessionFactory buildSessionFactory() {
         try {
-            // create a hibernate configuration
-            Configuration configuration = new Configuration();
             // create a Service registry
+            /**
+             *  Service : provides various types of functionality, ina pluggable manner.
+             *
+             *  For example , to access JDBC connection and manage it, (opening, closing) provided by
+             *  ConnectionProvider service.
+             *
+             *  ServiceRegistry : Hosts and manages services, service have lifecycle and have scope
+             *
+             */
             StandardServiceRegistry standardServiceRegistry = new StandardServiceRegistryBuilder()
-                    .applySettings(configuration.getProperties()).build();
+                    .configure() // configures settings from hibernate.cfg.xml
+                    .build();
             // build a session factory by providing the service registry to it.
-            return configuration.buildSessionFactory(standardServiceRegistry);
+            return new MetadataSources(standardServiceRegistry).buildMetadata().buildSessionFactory();
         } catch (HibernateException he) {
             log.error("Error while creating the session factory", he);
             throw new RuntimeException(he);

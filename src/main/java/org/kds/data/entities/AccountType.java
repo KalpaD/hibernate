@@ -11,7 +11,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@Table(name = "ACCOUNT_TYPE")
+@Table(name = "account_type")
 public class AccountType {
 
     @Column(name = "ACCOUNT_TYPE_ID")
