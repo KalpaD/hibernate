@@ -22,11 +22,9 @@ public class HibernateUtil {
         try {
             // create a hibernate configuration
             Configuration configuration = new Configuration();
-            // register the annotated class with the configuration
-            configuration.addAnnotatedClass(User.class);
-
             // create a Service registry
-            StandardServiceRegistry standardServiceRegistry = new StandardServiceRegistryBuilder().build();
+            StandardServiceRegistry standardServiceRegistry = new StandardServiceRegistryBuilder()
+                    .applySettings(configuration.getProperties()).build();
             // build a session factory by providing the service registry to it.
             return configuration.buildSessionFactory(standardServiceRegistry);
         } catch (HibernateException he) {
