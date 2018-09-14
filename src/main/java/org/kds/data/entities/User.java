@@ -35,7 +35,13 @@ public class User {
     @Column(name = "LAST_UPDATED_BY")
     private String lastUpdatedBy;
 
-    @Column(name = "CREATED_DATE")
+    /**
+     *  This demonstrates the use of updatable property in @Column
+     *  to control the updatability of certain columns.
+     *
+     *  Here the CREATED_DATE should not be updated once it created.
+     */
+    @Column(name = "CREATED_DATE", updatable = false)
     private Date createdDate;
 
     @Column(name = "CREATED_BY")

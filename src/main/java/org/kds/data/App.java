@@ -9,11 +9,22 @@ import java.util.Date;
 
 @Slf4j
 public class App {
-    public static void main(String[] args) {
 
-        log.info("Starting up Hibernate application..");
+    private Session session;
+
+    App () {
         // open a session
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        session = HibernateUtil.getSessionFactory().openSession();
+    }
+
+
+    /**
+     * Create a user via the hibernate session.
+     * @param session The hibernate session.
+     * @return Id of the newly created user.
+     */
+    private long createUser(Session session) {
+
         // Begin a unit of work
         Transaction transaction = session.beginTransaction();
 
@@ -33,13 +44,54 @@ public class App {
         user.setState("NY");
 
         // insert the user
-        session.save(user);
-
+        long id  = (long) session.save(user);
         // commit the unit of work
         transaction.commit();
 
+        return id;
+    }
+
+    /**
+     *  Update the given user with single property.
+     */
+    private void updateUser(Session session, long userId, Object property) {
+
+        // start a new transaction
+        Transaction updateTx = session.beginTransaction();
+        // get the newly create user from the db
+        User newUser = session.get(User.class, userId);
+        // set property to ne value
+        newUser.setFirstName("Jane");
+        // use the same session to update the user
+        session.update(newUser);
+        // commit the update
+        updateTx.commit();
+
+    }
+
+
+    private Session getSession() {
+        return session;
+    }
+
+    private void closeSession() {
         // close the session
         session.close();
+    }
+
+    public static void main(String[] args) {
+
+        log.info("Starting up Hibernate application..");
+
+        App app = new App();
+
+        Session session= app.getSession();
+        // create a user
+        long userId = app.createUser(session);
+
+        app.updateUser(session, userId, "Jane");
+
+        app.closeSession();
         log.info("Shutting down Hibernate application..");
     }
 }
