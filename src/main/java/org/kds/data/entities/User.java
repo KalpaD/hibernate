@@ -12,8 +12,22 @@ import java.util.Date;
 @Table(name = "finances_user")
 public class User {
 
+    /**
+     * Here we demo how to use a table for id generation and how to plug that to the
+     * id value of the entity using hibernate.
+     *
+     * If we leave the @GeneratedValue without any configuration, then the generation strategy will be
+     * defaulted to AUTO mode, AUTO allow hibernate to select a id generation strategy for us based on the DB
+     * vendor.
+     *
+     * Keep in mind that sequence generation is faster than id generation strategy.
+     * But may not be available in all vendors.
+     *
+     */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "user_table_generator")
+    @TableGenerator(name = "user_table_generator",
+            table = "ifinances_keys", pkColumnName = "PK_NAME", valueColumnName = "PK_VALUE")
     @Column(name = "USER_ID")
     private long userId;
 

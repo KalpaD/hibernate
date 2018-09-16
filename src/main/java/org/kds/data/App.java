@@ -96,7 +96,7 @@ public class App {
 
         App app = new App();
 
-        Session session= app.getSession();
+        Session session = app.getSession();
         // create a user
         long userId = app.createUser(session);
 
