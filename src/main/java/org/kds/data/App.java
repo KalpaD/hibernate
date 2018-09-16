@@ -17,7 +17,6 @@ public class App {
         session = HibernateUtil.getSessionFactory().openSession();
     }
 
-
     /**
      * Create a user via the hibernate session.
      * @param session The hibernate session.
@@ -66,19 +65,31 @@ public class App {
         session.update(newUser);
         // commit the update
         updateTx.commit();
-
     }
 
-
+    /**
+     * Return the hibernate session.
+     *
+     * @return The hibernate session.
+     */
     private Session getSession() {
         return session;
     }
 
+    /**
+     * Close the hibernate session.
+     *
+     */
     private void closeSession() {
         // close the session
         session.close();
     }
 
+    /**
+     * Main entry point of the hibernate demo program.
+     *
+     * @param args
+     */
     public static void main(String[] args) {
 
         log.info("Starting up Hibernate application..");

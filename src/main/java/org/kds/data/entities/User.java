@@ -23,7 +23,13 @@ public class User {
     @Column(name = "LAST_NAME")
     private String lastName;
 
-    @Column(name = "BIRTH_DATE")
+    /**
+     * Here we demonstrates another Column attribute
+     * nullable , this can prevent attributes getting set to
+     * null values. The importance here is hibernate will complain about it
+     * before it reach the db level at all.
+     */
+    @Column(name = "BIRTH_DATE", nullable = false)
     private Date birthDate;
 
     @Column(name = "EMAIL_ADDRESS")
