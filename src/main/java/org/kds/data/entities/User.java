@@ -68,4 +68,12 @@ public class User {
     @Column(name = "ZIP_CODE")
     private String zipCode;
 
+    /**
+     *  Demo how to inform hibernate to ignore a filed in a entity class
+     *  by adding @Transient
+     *
+     */
+    @Transient
+    private boolean valid;
+
 }

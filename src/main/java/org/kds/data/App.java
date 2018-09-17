@@ -100,7 +100,8 @@ public class App {
         // create a user
         long userId = app.createUser(session);
 
-        app.updateUser(session, userId, "Jane");
+        // update the user
+        //app.updateUser(session, userId, "Jane");
 
         app.closeSession();
         log.info("Shutting down Hibernate application..");
