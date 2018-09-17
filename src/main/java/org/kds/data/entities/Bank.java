@@ -4,9 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 
 @Getter
 @Setter
@@ -56,8 +54,9 @@ public class Bank {
      * common column.
      */
     @CollectionTable(name = "bank_contact", joinColumns = @JoinColumn(name = "BANK_ID"))
+    @MapKeyColumn(name = "POSITION_TYPE")
     @Column(name = "NAME") // @Column indicates these strings should be stored in "NAME" column.
-    private Collection<String> contacts = new ArrayList<>();
+    private Map<String, String> contacts = new HashMap<>();
 
     public String getAddressLine1() {
         return address.getAddressLineOne();

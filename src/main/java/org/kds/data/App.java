@@ -128,8 +128,8 @@ public class App {
         bank.setCreatedDate(new Date());
         bank.setLastUpdatedBy("Kevin");
         bank.setLastUpdatedDate(new Date());
-        bank.getContacts().add("Joe");
-        bank.getContacts().add("Mary");
+        bank.getContacts().put("MANAGER", "Joe");
+        bank.getContacts().put("BANK_ASSIST", "Mary");
 
         session.save(bank);
 
