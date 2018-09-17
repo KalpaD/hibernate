@@ -14,5 +14,6 @@
         <property name="show_sql">true</property>
 
         <mapping class="org.kds.data.entities.User"/>
+        <mapping class="org.kds.data.entities.TimeTest"/>
     </session-factory>
 </hibernate-configuration>

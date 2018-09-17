@@ -3,6 +3,7 @@ package org.kds.data;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.kds.data.entities.TimeTest;
 import org.kds.data.entities.User;
 
 import java.util.Date;
@@ -67,6 +68,23 @@ public class App {
         updateTx.commit();
     }
 
+
+    private void createTimeReacord(Session session) {
+
+        // create a new transaction
+        Transaction createTx = session.beginTransaction();
+        // create a new time record
+        TimeTest timeTest = new TimeTest(new Date());
+        // save the time record
+        session.save(timeTest);
+        // commit the record creation
+        createTx.commit();
+
+        session.refresh(timeTest);
+
+        log.info("Time Record : ", timeTest.toString());
+    }
+
     /**
      * Return the hibernate session.
      *
@@ -98,10 +116,13 @@ public class App {
 
         Session session= app.getSession();
         // create a user
-        long userId = app.createUser(session);
+        //long userId = app.createUser(session);
 
         // update the user
         //app.updateUser(session, userId, "Jane");
+
+        // create and print time record.
+        app.createTimeReacord(session);
 
         app.closeSession();
         log.info("Shutting down Hibernate application..");
