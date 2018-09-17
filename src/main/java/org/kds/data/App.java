@@ -24,10 +24,9 @@ public class App {
 
     /**
      * Create a user via the hibernate session.
-     * @param session The hibernate session.
      * @return Id of the newly created user.
      */
-    private long createUser(Session session) {
+    private long createUser() {
 
         // Begin a unit of work
         Transaction transaction = session.beginTransaction();
@@ -58,7 +57,7 @@ public class App {
     /**
      *  Update the given user with single property.
      */
-    private void updateUser(Session session, long userId, Object property) {
+    private void updateUser(long userId, Object property) {
 
         // start a new transaction
         Transaction updateTx = session.beginTransaction();
@@ -73,7 +72,7 @@ public class App {
     }
 
 
-    private void createTimeRecord(Session session) {
+    private void createTimeRecord() {
 
         // create a new transaction
         Transaction createTx = session.beginTransaction();
@@ -90,7 +89,7 @@ public class App {
     }
 
 
-    private void createBankRecord(Session session) {
+    private void createBankRecord() {
 
         Transaction bankTx = session.beginTransaction();
 
@@ -114,6 +113,29 @@ public class App {
         bankTx.commit();
     }
 
+    private void createBankRecordWithCollectionOfBasicValues() {
+
+        Transaction bankTx = session.beginTransaction();
+
+        Bank bank = new Bank();
+        bank.setName("Federal Trust");
+        bank.setAddressLine1("33 Wall Street");
+        bank.setAddressLine2("Suite 233");
+        bank.setCity("New York");
+        bank.setState("NY");
+        bank.setZipCode("12345");
+        bank.setCreatedBy("Kevin");
+        bank.setCreatedDate(new Date());
+        bank.setLastUpdatedBy("Kevin");
+        bank.setLastUpdatedDate(new Date());
+        bank.getContacts().add("Joe");
+        bank.getContacts().add("Mary");
+
+        session.save(bank);
+
+        bankTx.commit();
+    }
+
 
     /**
      * Main entry point of the hibernate demo program.
@@ -126,17 +148,18 @@ public class App {
 
         App app = new App();
         try {
-            Session session = app.getSession();
             // create a user
-            //long userId = app.createUser(session);
+            //long userId = app.createUser();
 
             // update the user
-            //app.updateUser(session, userId, "Jane");
+            //app.updateUser(userId, "Jane");
 
             // create and print time record.
-            //app.createTimeRecord(session);
+            //app.createTimeRecord();
 
-            app.createBankRecord(session);
+            //app.createBankRecord();
+
+            app.createBankRecordWithCollectionOfBasicValues();
 
         } catch (Exception ex) {
             log.error("Error while executing the hibernate operations", ex);
@@ -147,15 +170,6 @@ public class App {
         }
 
         log.info("Shutting down Hibernate application..");
-    }
-
-    /**
-     * Return the hibernate session.
-     *
-     * @return The hibernate session.
-     */
-    private Session getSession() {
-        return this.session;
     }
 
     /**

@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 @Getter
@@ -43,6 +45,19 @@ public class Bank {
     @Column(name = "ADDRESS_TYPE")
     private String addressType;
 
+    /**
+     * @ElementCollection says that we are trying to map a collection of instance
+     * that are basic or composite type.(Embeddable)
+     */
+    @ElementCollection
+    /**
+     * @CollectionTable says that for the collection mapping hibernate should look at the
+     * table = bank_contact and the joinColumns = BANK_ID indicates hibernate the way to find the mapping using a
+     * common column.
+     */
+    @CollectionTable(name = "bank_contact", joinColumns = @JoinColumn(name = "BANK_ID"))
+    @Column(name = "NAME") // @Column indicates these strings should be stored in "NAME" column.
+    private Collection<String> contacts = new ArrayList<>();
 
     public String getAddressLine1() {
         return address.getAddressLineOne();
