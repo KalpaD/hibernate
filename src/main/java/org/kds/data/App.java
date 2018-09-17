@@ -2,7 +2,9 @@ package org.kds.data;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.kds.data.entities.Bank;
 import org.kds.data.entities.TimeTest;
 import org.kds.data.entities.User;
 
@@ -12,10 +14,12 @@ import java.util.Date;
 public class App {
 
     private Session session;
+    private SessionFactory sessionFactory;
 
     App () {
         // open a session
-        session = HibernateUtil.getSessionFactory().openSession();
+        sessionFactory = HibernateUtil.getSessionFactory();
+        session = sessionFactory.openSession();
     }
 
     /**
@@ -69,7 +73,7 @@ public class App {
     }
 
 
-    private void createTimeReacord(Session session) {
+    private void createTimeRecord(Session session) {
 
         // create a new transaction
         Transaction createTx = session.beginTransaction();
@@ -85,13 +89,73 @@ public class App {
         log.info("Time Record : ", timeTest.toString());
     }
 
+
+    private void createBankRecord(Session session) {
+
+        Transaction bankTx = session.beginTransaction();
+
+        Bank bank = new Bank();
+        bank.setName("Federal Trust");
+        bank.setAddressLine1("33 Wall Street");
+        bank.setAddressLine2("Suite 233");
+        bank.setCity("New York");
+        bank.setState("NY");
+        bank.setZipCode("12345");
+        // bank.setInternational(false);
+        bank.setCreatedBy("Kevin");
+        bank.setCreatedDate(new Date());
+        bank.setLastUpdatedBy("Kevin");
+        bank.setLastUpdatedDate(new Date());
+      // bank.getContacts().add("Joe");
+      // bank.getContacts().add("Mary");
+
+        session.save(bank);
+
+        bankTx.commit();
+    }
+
+
+    /**
+     * Main entry point of the hibernate demo program.
+     *
+     * @param args
+     */
+    public static void main(String[] args) {
+
+        log.info("Starting up Hibernate application..");
+
+        App app = new App();
+        try {
+            Session session = app.getSession();
+            // create a user
+            //long userId = app.createUser(session);
+
+            // update the user
+            //app.updateUser(session, userId, "Jane");
+
+            // create and print time record.
+            //app.createTimeRecord(session);
+
+            app.createBankRecord(session);
+
+        } catch (Exception ex) {
+            log.error("Error while executing the hibernate operations", ex);
+        } finally {
+            app.closeSession();
+            app.closeSessionFactory();
+            log.info("Session and SessionFactory closed successfully.");
+        }
+
+        log.info("Shutting down Hibernate application..");
+    }
+
     /**
      * Return the hibernate session.
      *
      * @return The hibernate session.
      */
     private Session getSession() {
-        return session;
+        return this.session;
     }
 
     /**
@@ -104,27 +168,9 @@ public class App {
     }
 
     /**
-     * Main entry point of the hibernate demo program.
-     *
-     * @param args
+     * Close the session factory.
      */
-    public static void main(String[] args) {
-
-        log.info("Starting up Hibernate application..");
-
-        App app = new App();
-
-        Session session= app.getSession();
-        // create a user
-        //long userId = app.createUser(session);
-
-        // update the user
-        //app.updateUser(session, userId, "Jane");
-
-        // create and print time record.
-        app.createTimeReacord(session);
-
-        app.closeSession();
-        log.info("Shutting down Hibernate application..");
+    private void closeSessionFactory() {
+        sessionFactory.close();
     }
 }

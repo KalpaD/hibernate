@@ -3,10 +3,7 @@ package org.kds.data.entities;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Getter
@@ -22,20 +19,11 @@ public class Bank {
     @Column(name = "NAME")
     private String name;
 
-    @Column(name = "ADDRESS_LINE_1")
-    private String addressLineOne;
-
-    @Column(name = "ADDRESS_LINE_2")
-    private String addressLineTwo;
-
-    @Column(name = "CITY")
-    private String city;
-
-    @Column(name = "STATE")
-    private String state;
-
-    @Column(name = "ZIP_CODE")
-    private String zipCode;
+    /**
+     * @Embedded Indicate this type is embedded using a Embeddable type.
+     */
+    @Embedded
+    private Address address = new Address();
 
     @Column(name = "LAST_UPDATED_DATE")
     private Date lastUpdatedDate;
@@ -54,4 +42,45 @@ public class Bank {
 
     @Column(name = "ADDRESS_TYPE")
     private String addressType;
+
+
+    public String getAddressLine1() {
+        return address.getAddressLineOne();
+    }
+
+    public void setAddressLine1(String addressLine1) {
+        this.address.setAddressLineOne(addressLine1);
+    }
+
+    public String getAddressLine2() {
+        return address.getAddressLineTwo();
+    }
+
+    public void setAddressLine2(String addressLine2) {
+        this.address.setAddressLineTwo(addressLine2);
+    }
+
+    public String getCity() {
+        return address.getCity();
+    }
+
+    public void setCity(String city) {
+        this.address.setCity(city);
+    }
+
+    public String getState() {
+        return address.getState();
+    }
+
+    public void setState(String state) {
+        this.address.setState(state);
+    }
+
+    public String getZipCode() {
+        return address.getZipCode();
+    }
+
+    public void setZipCode(String zipCode) {
+        this.address.setZipCode(zipCode);
+    }
 }
