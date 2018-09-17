@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.kds.data.entities.Bank;
+import org.kds.data.entities.Credential;
 import org.kds.data.entities.TimeTest;
 import org.kds.data.entities.User;
 
@@ -136,6 +137,38 @@ public class App {
         bankTx.commit();
     }
 
+    private void uniDirectionalOneToOneAccossiation() {
+
+        Transaction credentialTx = session.beginTransaction();
+
+        User user = new User();
+        user.setBirthDate(new Date());
+        user.setCreatedBy("Admin");
+        user.setCreatedDate(new Date());
+        user.setEmailAddress("john@newcomp.com.au");
+        user.setFirstName("Sam");
+        user.setLastName("Deo");
+        user.setLastUpdatedBy("Admin");
+        user.setLastUpdatedDate(new Date());
+        user.setAddressLineOne("Unit 5, 190 High Street");
+        user.setAddressLineTwo("Randwick");
+        user.setCity("New York");
+        user.setState("NY");
+
+        Credential credential = new Credential();
+        credential.setUsername("john@newcomp.com.au");
+        credential.setPassword("password");
+        /**
+         * Set the user , since we set the CascadeType.ALL as the cascade type
+         * saving credential object will automatically save the User objcet as well.
+         */
+        credential.setUser(user);
+
+        session.save(credential);
+
+        credentialTx.commit();
+    }
+
 
     /**
      * Main entry point of the hibernate demo program.
@@ -159,7 +192,9 @@ public class App {
 
             //app.createBankRecord();
 
-            app.createBankRecordWithCollectionOfBasicValues();
+            //app.createBankRecordWithCollectionOfBasicValues();
+
+            app.uniDirectionalOneToOneAccossiation();
 
         } catch (Exception ex) {
             log.error("Error while executing the hibernate operations", ex);
