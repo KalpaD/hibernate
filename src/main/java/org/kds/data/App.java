@@ -160,13 +160,56 @@ public class App {
         credential.setPassword("password");
         /**
          * Set the user , since we set the CascadeType.ALL as the cascade type
-         * saving credential object will automatically save the User objcet as well.
+         * saving credential object will automatically save the User object as well.
          */
         credential.setUser(user);
 
         session.save(credential);
 
         credentialTx.commit();
+    }
+
+    private void biDirectionalOneToOneAccossiation() {
+
+        Transaction credentialTx = session.beginTransaction();
+
+        User user = new User();
+        user.setBirthDate(new Date());
+        user.setCreatedBy("Admin");
+        user.setCreatedDate(new Date());
+        user.setEmailAddress("Paul@newcomp.com.au");
+        user.setFirstName("Paul");
+        user.setLastName("Deo");
+        user.setLastUpdatedBy("Admin");
+        user.setLastUpdatedDate(new Date());
+        user.setAddressLineOne("Unit 7, 190 High Street");
+        user.setAddressLineTwo("Huts");
+        user.setCity("Sydney");
+        user.setState("NW");
+
+        Credential credential = new Credential();
+        credential.setUsername("paul@newcomp.com.au");
+        credential.setPassword("password1");
+
+        /**
+         * Note that here we set the user object to credential object same as in the unit directional one to one scenario.
+         *
+         * And we set the credential object in to user object as well. Since there is no cascading effect for inverse
+         * of the owning relationship, we need to take care of that.
+         */
+        credential.setUser(user);
+        user.setCredential(credential);
+
+        session.save(credential);
+
+        credentialTx.commit();
+
+        /**
+         * Demonstrate the use of credential object to access user information, after the bidirectional
+         * relationship established properly.
+         */
+        User dbUser = session.get(User.class, credential.getUser().getUserId());
+        System.out.println(dbUser.getFirstName());
     }
 
 
@@ -194,7 +237,9 @@ public class App {
 
             //app.createBankRecordWithCollectionOfBasicValues();
 
-            app.uniDirectionalOneToOneAccossiation();
+            //app.uniDirectionalOneToOneAccossiation();
+
+            app.biDirectionalOneToOneAccossiation();
 
         } catch (Exception ex) {
             log.error("Error while executing the hibernate operations", ex);

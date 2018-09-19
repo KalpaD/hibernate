@@ -17,6 +17,19 @@ public class User {
     @Column(name = "USER_ID")
     private long userId;
 
+    /**
+     * mappedBy, attributed only used by the non-owning side of the relationship.
+     * it basically says this credential reference is mapped by the user filed in the User object.
+     *
+     * Note that we have not used the cascade attribute on the OneToOne mapping or @JoinColumn here.
+     * It is because User is not the owning party of this relationship.
+     *
+     * If we use cascade and @JoinColumn in both sides, these two entities will go to never ending loop of
+     * persisting each other.
+     */
+    @OneToOne(mappedBy = "user")
+    private Credential credential;
+
     @Column(name = "FIRST_NAME")
     private String firstName;
 
