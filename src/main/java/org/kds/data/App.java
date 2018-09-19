@@ -4,11 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.kds.data.entities.Bank;
-import org.kds.data.entities.Credential;
-import org.kds.data.entities.TimeTest;
-import org.kds.data.entities.User;
+import org.kds.data.entities.*;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Date;
 
 @Slf4j
@@ -212,6 +211,55 @@ public class App {
         System.out.println(dbUser.getFirstName());
     }
 
+    private void uniDirectionalOneToManyAccossiation() {
+
+        Transaction accTx = session.beginTransaction();
+
+        Account account = new Account();
+        account.setBankId(10);
+        account.setAccountType("Personal");
+        account.setCreatedBy("Admin");
+        account.setCreatedDate(new Date(1474253240));
+        account.setOpenDate(new Date(1474253240));
+        account.setCloseDate(new Date(1600483640));
+        account.setCurrentBalance(new BigDecimal(10000));
+        account.setId(1234);
+        account.setInitBalance(new BigDecimal(10));
+        account.setLastUpdatedBy("Admin");
+        account.setLastUpdatedDate(new Date());
+        account.setName("Paul Adams");
+
+        org.kds.data.entities.Transaction beltPurchase = new org.kds.data.entities.Transaction();
+        beltPurchase.setTitle("Dress Belt");
+        beltPurchase.setAmount(new BigDecimal("50.00"));
+        beltPurchase.setClosingBalance(new BigDecimal("0.00"));
+        beltPurchase.setCreatedBy("Kevin Bowersox");
+        beltPurchase.setCreatedDate(new Date());
+        beltPurchase.setInitialBalance(new BigDecimal("0.00"));
+        beltPurchase.setLastUpdatedBy("Kevin Bowersox");
+        beltPurchase.setLastUpdatedDate(new Date());
+        beltPurchase.setNotes("New Dress Belt");
+        beltPurchase.setTransactionType("Debit");
+
+        org.kds.data.entities.Transaction shoePurchase = new org.kds.data.entities.Transaction();
+        shoePurchase.setTitle("Work Shoes");
+        shoePurchase.setAmount(new BigDecimal("100.00"));
+        shoePurchase.setClosingBalance(new BigDecimal("0.00"));
+        shoePurchase.setCreatedBy("Kevin Bowersox");
+        shoePurchase.setCreatedDate(new Date());
+        shoePurchase.setInitialBalance(new BigDecimal("0.00"));
+        shoePurchase.setLastUpdatedBy("Kevin Bowersox");
+        shoePurchase.setLastUpdatedDate(new Date());
+        shoePurchase.setNotes("Nice Pair of Shoes");
+        shoePurchase.setTransactionType("Debit");
+
+        account.getTransactions().addAll(Arrays.asList(beltPurchase, shoePurchase));
+
+        session.save(account);
+
+        accTx.commit();
+    }
+
 
     /**
      * Main entry point of the hibernate demo program.
@@ -239,7 +287,9 @@ public class App {
 
             //app.uniDirectionalOneToOneAccossiation();
 
-            app.biDirectionalOneToOneAccossiation();
+            //app.biDirectionalOneToOneAccossiation();
+
+            app.uniDirectionalOneToManyAccossiation();
 
         } catch (Exception ex) {
             log.error("Error while executing the hibernate operations", ex);

@@ -3,10 +3,7 @@ package org.kds.data.entities;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -17,23 +14,21 @@ import java.util.Date;
 public class Transaction {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "TRANSACTION_ID")
     private long id;
-
-    @Column(name = "ACCOUNT_ID")
-    private long accountId;
 
     @Column(name = "TITLE")
     private String title;
 
     @Column(name = "TRANSACTION_TYPE")
-    private String type;
+    private String transactionType;
 
     @Column(name = "AMOUNT")
     private BigDecimal amount;
 
     @Column(name = "INITIAL_BALANCE")
-    private BigDecimal initBalance;
+    private BigDecimal initialBalance;
 
     @Column(name = "CLOSING_BALANCE")
     private BigDecimal closingBalance;
@@ -44,7 +39,7 @@ public class Transaction {
     @Column(name = "LAST_UPDATED_DATE")
     private Date lastUpdatedDate;
 
-    @Column(name = "LAST_UPDATED_DATE")
+    @Column(name = "LAST_UPDATED_BY")
     private String lastUpdatedBy;
 
     @Column(name = "CREATED_DATE")

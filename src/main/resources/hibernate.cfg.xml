@@ -17,5 +17,7 @@
         <mapping class="org.kds.data.entities.TimeTest"/>
         <mapping class="org.kds.data.entities.Bank"/>
         <mapping class="org.kds.data.entities.Credential"/>
+        <mapping class="org.kds.data.entities.Account"/>
+        <mapping class="org.kds.data.entities.Transaction"/>
     </session-factory>
 </hibernate-configuration>
